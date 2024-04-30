@@ -2,6 +2,7 @@ let dragElem = null;
 
 function addEventListeners(div) {
     div.addEventListener("dragstart", e => {
+        console.log("dragstart event fired for div with id:", e.target.id);
         dragElem = e.target;
     });
 
