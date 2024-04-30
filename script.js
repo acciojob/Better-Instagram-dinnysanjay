@@ -2,27 +2,25 @@ let dragElem = null;
 
 function addEventListeners(div) {
     div.addEventListener("dragstart", e => {
-        console.log("dragging started", e);
         dragElem = e.target;
     });
 
     div.addEventListener("dragover", e => {
-        e.preventDefault(); // This is necessary to allow dropping
+        e.preventDefault();
     });
 
     div.addEventListener("drop", e => {
-        e.preventDefault(); // This is necessary to allow dropping
+        e.preventDefault();
 
         // Swap the divs
-        let temp = e.target.outerHTML;
-        e.target.outerHTML = dragElem.outerHTML;
-        dragElem.outerHTML = temp;
+        let parent = dragElem.parentNode;
+        let next = dragElem.nextElementSibling === e.target ? dragElem : dragElem.nextElementSibling;
 
-        // Add event listeners to the new divs
-        addEventListeners(e.target);
-        addEventListeners(dragElem);
+        // Move `dragElem` to its new position
+        e.target.parentNode.insertBefore(dragElem, e.target);
 
-        dragElem = null;
+        // Move `e.target` to its new position
+        parent.insertBefore(e.target, next);
     });
 }
 
