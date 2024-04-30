@@ -6,21 +6,16 @@ function addEventListeners(div) {
     });
 
     div.addEventListener("dragover", e => {
-        e.preventDefault();
+        e.preventDefault(); // This is necessary to allow dropping
     });
 
     div.addEventListener("drop", e => {
-        e.preventDefault();
+        e.preventDefault(); // This is necessary to allow dropping
 
-        // Swap the divs
-        let parent = dragElem.parentNode;
-        let next = dragElem.nextElementSibling === e.target ? dragElem : dragElem.nextElementSibling;
-
-        // Move `dragElem` to its new position
-        e.target.parentNode.insertBefore(dragElem, e.target);
-
-        // Move `e.target` to its new position
-        parent.insertBefore(e.target, next);
+        // Swap the background images
+        let temp = e.target.style.backgroundImage;
+        e.target.style.backgroundImage = dragElem.style.backgroundImage;
+        dragElem.style.backgroundImage = temp;
     });
 }
 
