@@ -12,10 +12,16 @@ function addEventListeners(div) {
     div.addEventListener("drop", e => {
         e.preventDefault(); // This is necessary to allow dropping
 
-        // Swap the background images
-        let temp = e.target.style.backgroundImage;
-        e.target.style.backgroundImage = dragElem.style.backgroundImage;
-        dragElem.style.backgroundImage = temp;
+        // Swap the divs
+        let temp = e.target.outerHTML;
+        e.target.outerHTML = dragElem.outerHTML;
+        dragElem.outerHTML = temp;
+
+        // Add event listeners to the new divs
+        addEventListeners(e.target);
+        addEventListeners(dragElem);
+
+        dragElem = null;
     });
 }
 
