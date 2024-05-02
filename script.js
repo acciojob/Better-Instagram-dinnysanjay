@@ -1,45 +1,31 @@
-let dragElem = null;
-let temp = e.target.style.backgroundImage;
-e.target.style.backgroundImage = dragElem.style.backgroundImage;
-dragElem.style.backgroundImage = temp;
-//This should correctly swap the images, but there may be an issue if e.target is not the div that you’re expecting. For example, if the divs contain other elements, e.target could be one of those child elements, not the div itself.
 
-//To ensure that you’re always working with the divs, you can use the closest method to get the nearest ancestor element that matches a given selector. In your case, you can use it to always get the div:
+var divs = document.querySelectorAll('div');
 
-let div = e.target.closest('.image');
-
-let temp = div.style.backgroundImage;
-div.style.backgroundImage = dragElem.style.backgroundImage;
-dragElem.style.backgroundImage = temp;
-
-function addEventListeners(div) {
-    div.addEventListener("dragstart", e => {
-        console.log("dragstart event fired for div with id:", e.target.id);
-        dragElem = e.target;
-    });
-
-    div.addEventListener("dragover", e => {
-        e.preventDefault(); // This is necessary to allow dropping
-    });
-
-    div.addEventListener("drop", e => {
-    e.preventDefault(); // This is necessary to allow dropping
-
-    if (dragElem) {
-        // Swap the background images
-        let temp = e.target.style.backgroundImage;
-        e.target.style.backgroundImage = dragElem.style.backgroundImage;
-        dragElem.style.backgroundImage = temp;
-
-        dragElem = null;
-    }
+divs.forEach(function(div) {
+  div.addEventListener('dragstart', handleDragStart, false);
+  div.addEventListener('dragend', handleDragEnd, false);
 });
+//In your handleDragStart function, you’ll want to keep track of the element that’s being dragged. You can do this by setting a dataTransfer property:
+function handleDragStart(e) {
+  e.dataTransfer.setData('text/plain', this.id);
+}
+//Next, you need to handle the drop event. You’ll want to swap the images of the div that was dragged and the div that it was dropped onto:
+divs.forEach(function(div) {
+  div.addEventListener('drop', handleDrop, false);
+  div.addEventListener('dragover', handleDragOver, false);
+});
+
+function handleDrop(e) {
+  e.preventDefault();
+  
+  var draggedId = e.dataTransfer.getData('text/plain');
+  var draggedElement = document.getElementById(draggedId);
+  
+  var temp = this.style.backgroundImage;
+  this.style.backgroundImage = draggedElement.style.backgroundImage;
+  draggedElement.style.backgroundImage = temp;
 }
 
-// Get all divs
-let divs = document.getElementsByClassName("image");
-
-// Add event listeners to all divs
-for(let i=0; i<divs.length; i++) {
-    addEventListeners(divs[i]);
+function handleDragOver(e) {
+  e.preventDefault(); // this allows us to drop
 }
