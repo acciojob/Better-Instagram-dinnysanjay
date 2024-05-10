@@ -1,31 +1,51 @@
 
-var divs = document.querySelectorAll('div');
+let dragSrcEl = null;
 
-divs.forEach(function(div) {
-  div.addEventListener('dragstart', handleDragStart, false);
-  div.addEventListener('dragend', handleDragEnd, false);
-});
-//In your handleDragStart function, you’ll want to keep track of the element that’s being dragged. You can do this by setting a dataTransfer property:
 function handleDragStart(e) {
-  e.dataTransfer.setData('text/plain', this.id);
-}
-//Next, you need to handle the drop event. You’ll want to swap the images of the div that was dragged and the div that it was dropped onto:
-divs.forEach(function(div) {
-  div.addEventListener('drop', handleDrop, false);
-  div.addEventListener('dragover', handleDragOver, false);
-});
-
-function handleDrop(e) {
-  e.preventDefault();
-  
-  var draggedId = e.dataTransfer.getData('text/plain');
-  var draggedElement = document.getElementById(draggedId);
-  
-  var temp = this.style.backgroundImage;
-  this.style.backgroundImage = draggedElement.style.backgroundImage;
-  draggedElement.style.backgroundImage = temp;
+  dragSrcEl = this;
+  e.dataTransfer.effectAllowed = 'move';
+  e.dataTransfer.setData('text/html', this.innerHTML);
 }
 
 function handleDragOver(e) {
-  e.preventDefault(); // this allows us to drop
+  if (e.preventDefault) {
+    e.preventDefault();
+  }
+  e.dataTransfer.dropEffect = 'move';
+  return false;
 }
+
+function handleDragEnter() {
+  this.classList.add('over');
+}
+
+function handleDragLeave() {
+  this.classList.remove('over');
+}
+
+function handleDrop(e) {
+  if (e.stopPropagation) {
+    e.stopPropagation();
+  }
+  if (dragSrcEl !== this) {
+    dragSrcEl.innerHTML = this.innerHTML;
+    this.innerHTML = e.dataTransfer.getData('text/html');
+  }
+  return false;
+}
+
+function handleDragEnd() {
+  this.classList.remove('over');
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  const cols = document.querySelectorAll('.draggable');
+  [].forEach.call(cols, function(col) {
+    col.addEventListener('dragstart', handleDragStart, false);
+    col.addEventListener('dragenter', handleDragEnter, false);
+    col.addEventListener('dragover', handleDragOver, false);
+    col.addEventListener('dragleave', handleDragLeave, false);
+    col.addEventListener('drop', handleDrop, false);
+    col.addEventListener('dragend', handleDragEnd, false);
+  });
+});
