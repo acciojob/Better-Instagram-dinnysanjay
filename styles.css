@@ -3,7 +3,29 @@
   flex-wrap: wrap;
   width: 400px;
 }
+#div1 {
+  background-image: url('path/to/image1.jpg');
+}
 
+#div2 {
+  background-image: url('path/to/image2.jpg');
+}
+
+#div3 {
+  background-image: url('path/to/image3.jpg');
+}
+
+#div4 {
+  background-image: url('path/to/image4.jpg');
+}
+
+#div5 {
+  background-image: url('path/to/image5.jpg');
+}
+
+#div6 {
+  background-image: url('path/to/image6.jpg');
+}
 .draggable {
   width: 100px;
   height: 100px;
