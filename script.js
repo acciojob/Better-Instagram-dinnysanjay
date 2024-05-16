@@ -33,9 +33,9 @@ document.addEventListener("DOMContentLoaded", function () {
         draggable.addEventListener("drop", function () {
             this.classList.remove("highlight");
             if (draggedItem !== null && draggedItem !== this) {
-                const tempStyle = this.style.backgroundImage;
+                const temp = this.style.backgroundImage;
                 this.style.backgroundImage = draggedItem.style.backgroundImage;
-                draggedItem.style.backgroundImage = tempStyle;
+                draggedItem.style.backgroundImage = temp;
             }
         });
     }
