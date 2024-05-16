@@ -4,7 +4,7 @@ let dragSrcEl = null;
 function handleDragStart(e) {
   dragSrcEl = this;
   e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.innerHTML);
+  e.dataTransfer.setData('text/html', this.style.backgroundImage);
 }
 
 function handleDragOver(e) {
