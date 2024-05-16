@@ -1,52 +1,42 @@
+document.addEventListener("DOMContentLoaded", function () {
+    const draggables = document.querySelectorAll(".draggable");
 
-let dragSrcEl = null;
+    let draggedItem = null;
 
-function handleDragStart(e) {
-  dragSrcEl = this;
-  e.dataTransfer.effectAllowed = 'move';
-  e.dataTransfer.setData('text/html', this.style.backgroundImage);
-}
+    for (const draggable of draggables) {
+        draggable.addEventListener("dragstart", function () {
+            draggedItem = this;
+            setTimeout(() => {
+                this.style.display = "none";
+            }, 0);
+        });
 
-function handleDragOver(e) {
-  if (e.preventDefault) {
-    e.preventDefault();
-  }
-  e.dataTransfer.dropEffect = 'move';
-  return false;
-}
+        draggable.addEventListener("dragend", function () {
+            setTimeout(() => {
+                draggedItem.style.display = "block";
+                draggedItem = null;
+            }, 0);
+        });
 
-function handleDragEnter() {
-  this.classList.add('over');
-}
+        draggable.addEventListener("dragover", function (e) {
+            e.preventDefault();
+        });
 
-function handleDragLeave() {
-  this.classList.remove('over');
-}
+        draggable.addEventListener("dragenter", function () {
+            this.classList.add("highlight");
+        });
 
-function handleDrop(e) {
-  if (e.stopPropagation) {
-    e.stopPropagation();
-  }
-  if (dragSrcEl !== this) {
-    let temp = this.style.backgroundImage;
-    this.style.backgroundImage = dragSrcEl.style.backgroundImage;
-    dragSrcEl.style.backgroundImage = temp;
-  }
-  return false;
-}
+        draggable.addEventListener("dragleave", function () {
+            this.classList.remove("highlight");
+        });
 
-function handleDragEnd() {
-  this.classList.remove('over');
-}
-
-document.addEventListener('DOMContentLoaded', function() {
-  const cols = document.querySelectorAll('.draggable');
-  [].forEach.call(cols, function(col) {
-    col.addEventListener('dragstart', handleDragStart, false);
-    col.addEventListener('dragenter', handleDragEnter, false);
-    col.addEventListener('dragover', handleDragOver, false);
-    col.addEventListener('dragleave', handleDragLeave, false);
-    col.addEventListener('drop', handleDrop, false);
-    col.addEventListener('dragend', handleDragEnd, false);
-  });
+        draggable.addEventListener("drop", function () {
+            this.classList.remove("highlight");
+            if (draggedItem !== null && draggedItem !== this) {
+                const tempStyle = this.style.backgroundImage;
+                this.style.backgroundImage = draggedItem.style.backgroundImage;
+                draggedItem.style.backgroundImage = tempStyle;
+            }
+        });
+    }
 });

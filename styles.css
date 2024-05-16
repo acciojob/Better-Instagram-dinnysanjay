@@ -3,7 +3,9 @@
     grid-template-columns: repeat(3, 200px);
     gap: 10px;
 }
-
+.highlight{
+	border: 2px dashed black;
+}
 .draggable {
     width: 200px;
     height: 200px;
